@@ -2,7 +2,9 @@ package com.sigulia.test;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import com.sigulia.pages.GithubPages;
 import com.sigulia.pages.WebSteps;
+import io.qameta.allure.*;
 import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import static io.qameta.allure.Allure.step;
 
@@ -17,6 +19,12 @@ public class SelenideIssue {
     GithubPages githubTest = new GithubPages();
 
     @Test
+    @Owner("sigulia")
+    @Feature("Задачи в репозитории")
+    @Story("Тест с применением Listener, проверка наличия Issue #2")
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Чистый Selenide (с Listener)")
+    @Link(value = "Github", url = "https://github.com/")
     public void testGithubIssueListener () {
         SelenideLogger.addListener("allure", new AllureSelenide());
         githubTest.openPage(nameWebsite)
@@ -26,6 +34,12 @@ public class SelenideIssue {
     }
 
     @Test
+    @Owner("sigulia")
+    @Feature("Задачи в репозитории")
+    @Story("Тест с применением Lambda, проверка наличия Issue #2")
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Лямбда шаги через step (name, () -> {})")
+    @Link(value = "Github", url = "https://github.com/")
     public void testGithubIssueLambda () {
         SelenideLogger.addListener("allure", new AllureSelenide());
         step("Открываем главную страницу" + nameWebsite, () -> {
@@ -43,6 +57,12 @@ public class SelenideIssue {
     }
 
     @Test
+    @Owner("sigulia")
+    @Feature("Задачи в репозитории")
+    @Story("Тест с применением аннотаций, проверка наличия Issue #2")
+    @Severity(SeverityLevel.BLOCKER)
+    @DisplayName("Шаги с аннотацией @Step")
+    @Link(value = "Github", url = "https://github.com/")
     public void testGithubIssueAnnotation () {
         SelenideLogger.addListener("allure", new AllureSelenide());
         WebSteps steps = new WebSteps();
