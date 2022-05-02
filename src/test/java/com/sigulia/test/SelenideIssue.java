@@ -1,59 +1,54 @@
 package com.sigulia.test;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import com.sigulia.pages.GithubPages;
+import com.sigulia.pages.WebSteps;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.Test;
-import static com.codeborne.selenide.Selectors.withText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
-import static org.openqa.selenium.By.linkText;
-import static org.openqa.selenium.By.partialLinkText;
+
 
 public class SelenideIssue {
 
-    SelenideElement searchInput = $(".header-search-input");
     String  nameWebsite = "https://github.com/",
             nameRepository = "DoraSigulia/DemoQA_Sigulia",
             namePage = "Issue",
             numberIssue = "#2";
 
+    GithubPages githubTest = new GithubPages();
 
     @Test
     public void testGithubIssueListener () {
         SelenideLogger.addListener("allure", new AllureSelenide());
-        open(nameWebsite);
-        searchNameRepository(nameRepository);
-        $(linkText(nameRepository)).click();
-        $(partialLinkText(namePage)).click();
-        $(withText(numberIssue)).click();
-
+        githubTest.openPage(nameWebsite)
+                .searchNameRepository(nameRepository)
+                .clickOnIssue(namePage)
+                .visibleNumberIssue(numberIssue);
     }
 
     @Test
     public void testGithubIssueLambda () {
         SelenideLogger.addListener("allure", new AllureSelenide());
         step("Открываем главную страницу" + nameWebsite, () -> {
-            open(nameWebsite);
+            githubTest.openPage(nameWebsite);
         });
-        step("Находим репозиторий " + nameRepository, () -> {
-            searchNameRepository(nameRepository);
-        });
-        step("Переходим на репозиторий " + nameRepository, () -> {
-            $(linkText(nameRepository)).click();
+        step("Находим и переходим на репозиторий " + nameRepository, () -> {
+            githubTest.searchNameRepository(nameRepository);
         });
         step("Переходим на вкладку " + namePage, () -> {
-            $(partialLinkText(namePage)).click();
+            githubTest.clickOnIssue(namePage);
         });
-        step("Переходим на " + namePage + " с номером" + numberIssue, () -> {
-            $(withText(numberIssue)).click();
+        step("Проверяем наличие Issue с номером" + numberIssue, () -> {
+            githubTest.visibleNumberIssue(numberIssue);
         });
     }
 
-    private void searchNameRepository(String nameRepository) {
-        searchInput.click();
-        searchInput.sendKeys(nameRepository);
-        searchInput.submit();
+    @Test
+    public void testGithubIssueAnnotation () {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+        WebSteps steps = new WebSteps();
+        steps.openPage(nameWebsite);
+        steps.searchNameRepository(nameRepository);
+        steps.clickOnIssue(namePage);
+        steps.visibleNumberIssue(numberIssue);
     }
-
 }
